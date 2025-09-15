@@ -1,0 +1,24 @@
+# Python
+backend/venv/
+backend/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+db.sqlite3
+*.log
+
+# Django
+staticfiles/
+media/
+
+# Node / React
+frontend/node_modules/
+
+# Environment files
+*.env
+*.env.local
+.env.*
+
+# OS / IDE
+.vscode/
