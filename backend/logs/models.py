@@ -25,16 +25,18 @@ class LogEntry(models.Model):
         ("on_duty", "On Duty"),
         ("off_duty", "Off Duty"),
         ("rest", "Rest"),
+        ("sleeper", "Sleeper"),
     ]
+
     logsheet = models.ForeignKey(LogSheet, on_delete=models.CASCADE, related_name="entries")
-    timestamp = models.DateTimeField()
+    day = models.PositiveIntegerField()  # Day index relative to trip
+    start_hour = models.FloatField()     # e.g., 4.77 → 4:46am
+    end_hour = models.FloatField()
     activity_type = models.CharField(max_length=20, choices=ACTIVITY_CHOICES)
-    latitude = models.FloatField(blank=True, null=True)
-    longitude = models.FloatField(blank=True, null=True)
     notes = models.TextField(blank=True, null=True)
 
     class Meta:
-        ordering = ["timestamp"]
+        ordering = ["day", "start_hour"]
 
 class Stop(models.Model):
     STOP_TYPES = [

@@ -175,15 +175,14 @@ def plan_and_persist_trip(current, pickup, dropoff, current_cycle_hours, driver)
 
     # Persist Daily Logs as LogEntry objects
     for day_log in dailyLogs:
-        day = day_log["day"]
         for entry in day_log["entries"]:
             LogEntry.objects.create(
                 logsheet=logsheet,
-                day=day,
+                day=day_log["day"],
                 start_hour=entry["startHour"],
                 end_hour=entry["endHour"],
-                status=entry["status"]
-            )
+                activity_type=entry["status"]
+        )
 
     return {
         "route": route,
