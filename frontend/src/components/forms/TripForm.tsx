@@ -35,7 +35,7 @@ export default function TripForm({ onSubmit }: TripFormProps) {
           type="text"
           value={current}
           onChange={(e) => setCurrent(e.target.value)}
-          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
           placeholder="e.g. West Legon, Accra"
         />
       </div>
@@ -48,7 +48,7 @@ export default function TripForm({ onSubmit }: TripFormProps) {
           type="text"
           value={pickup}
           onChange={(e) => setPickup(e.target.value)}
-          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
           placeholder="e.g. Achimota, Accra"
         />
       </div>
@@ -61,7 +61,7 @@ export default function TripForm({ onSubmit }: TripFormProps) {
           type="text"
           value={dropoff}
           onChange={(e) => setDropoff(e.target.value)}
-          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
           placeholder="e.g. Tema, Greater Accra"
         />
       </div>
@@ -76,7 +76,7 @@ export default function TripForm({ onSubmit }: TripFormProps) {
           max={70}
           value={cycleHours}
           onChange={(e) => setCycleHours(Number(e.target.value))}
-          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+          className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2"
         />
       </div>
 

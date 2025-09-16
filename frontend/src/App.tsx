@@ -1,20 +1,19 @@
 import './App.css'
-import TripForm from './components/forms/TripForm'
-import LogSheet from './components/log/LogSheet'
-import MapView from './components/map/MapView'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import TripPlanner from "./pages/Trip";
+import Logs from "./pages/Log";
 
 function App() {
-
   return (
-    <>    
-      <h1 className="text-3xl font-bold underline bg-blue-200">
-        Hello world!
-      </h1>
-      <MapView />
-      <TripForm onSubmit={() => null} />
-      <LogSheet day={1} hoursDriven={[8,9,10,11,12,13,14]} />
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/trip" element={<TripPlanner />} />
+        <Route path="/logs" element={<Logs />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
