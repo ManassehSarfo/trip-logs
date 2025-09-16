@@ -1,11 +1,9 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework import status
-from rest_framework import viewsets, status
 from rest_framework.views import APIView
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 from .models import Driver, LogSheet, LogEntry, Stop
@@ -22,6 +20,15 @@ class DriverViewSet(viewsets.ModelViewSet):
 class LogSheetViewSet(viewsets.ModelViewSet):
     queryset = LogSheet.objects.all()
     serializer_class = LogSheetSerializer
+
+    @action(detail=False, methods=['get'], url_path='by-driver')
+    def by_driver(self, request):
+        driver_name = request.query_params.get('name')
+        if not driver_name:
+            return Response({"error": "Driver name is required"}, status=status.HTTP_400_BAD_REQUEST)
+        logsheets = LogSheet.objects.filter(driver__name=driver_name)
+        serializer = self.get_serializer(logsheets, many=True)
+        return Response(serializer.data)
 
 class LogEntryViewSet(viewsets.ModelViewSet):
     queryset = LogEntry.objects.all()

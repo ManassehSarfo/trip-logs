@@ -19,6 +19,7 @@ class LogEntrySerializer(serializers.ModelSerializer):
 class LogSheetSerializer(serializers.ModelSerializer):
     entries = LogEntrySerializer(many=True, read_only=True)
     stops = StopSerializer(many=True, read_only=True)
+
     class Meta:
         model = LogSheet
         fields = ["id", "driver", "date", "start_location", "end_location", "entries", "stops"]

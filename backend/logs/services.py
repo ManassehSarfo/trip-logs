@@ -147,7 +147,7 @@ def build_daily_logs(route_json, stops, current_cycle_hours=0):
 
 
 def plan_and_persist_trip(current, pickup, dropoff, current_cycle_hours, driver):
-    from .models import LogSheet, Stop
+    from .models import LogSheet, Stop, LogEntry
 
     route_json = fetch_route(current, pickup, dropoff)
     stops = generate_stops_from_route(route_json, current_cycle_hours)
@@ -172,6 +172,18 @@ def plan_and_persist_trip(current, pickup, dropoff, current_cycle_hours, driver)
 
     route = build_route_instructions(route_json)
     dailyLogs = build_daily_logs(route_json, stops, current_cycle_hours)
+
+    # Persist Daily Logs as LogEntry objects
+    for day_log in dailyLogs:
+        day = day_log["day"]
+        for entry in day_log["entries"]:
+            LogEntry.objects.create(
+                logsheet=logsheet,
+                day=day,
+                start_hour=entry["startHour"],
+                end_hour=entry["endHour"],
+                status=entry["status"]
+            )
 
     return {
         "route": route,
