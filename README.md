@@ -1,4 +1,5 @@
-# Trip Logs
+# Driver Trip Logs
+<img src="dtl.png"  width="auto" height="200em">
 
 A full-stack web application that allows drivers to plan trips, view routes with stops and rests, and generate **Electronic Logging Device (ELD) daily log sheets**.  
 
@@ -41,4 +42,6 @@ Built with **Django (backend)** and **React + TypeScript (frontend)**.
 - Docker (optional, for containerized setup)
 - Git
 
+### Diagrams & Architechure
+- Draw IO
 ---

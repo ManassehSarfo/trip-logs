@@ -1,6 +1,7 @@
 // src/pages/Home.tsx
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import dtl from "../assets/dtlogs.png";
 
 const generateGuestName = () => {
   const animals = ["Falcon", "Wolf", "Tiger", "Hawk", "Eagle", "Lion"];
@@ -107,7 +108,8 @@ export default function Home() {
       </header>
 
       {/* Content */}
-      <main className="flex flex-grow items-center justify-center">
+      <main className="flex flex-col flex-grow items-center justify-center">
+        <img src={dtl} alt="Logo" className="h-32 -m-4" />
         <div className="flex flex-col items-center justify-center bg-gray-50 p-12 rounded-2xl shadow-lg animate-fadeScale">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">
             Welcome to Trip Planner
