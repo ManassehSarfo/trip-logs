@@ -9,8 +9,8 @@ interface PageSwitcherProps {
 const PageSwitcher: React.FC<PageSwitcherProps> = ({
   options = [
     { label: 'Home', path: '/' },
-    { label: 'Trip', path: '/trip' },
-    { label: 'Logs', path: '/logs' },
+    { label: 'Trip Info', path: '/trip' },
+    { label: 'Logsheet', path: '/logs' },
   ],
   defaultSelected,
 }) => {

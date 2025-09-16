@@ -1,16 +1,6 @@
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from "react-leaflet";
 import L from "leaflet";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-// Fix leaflet's default marker icons
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
+import { useEffect } from "react";
 
 type MapViewProps = {
   current?: [number, number];
@@ -19,8 +9,27 @@ type MapViewProps = {
   route?: [number, number][];
 };
 
+function FitBounds({ points }: { points: [number, number][] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (points.length > 0) {
+      const bounds = L.latLngBounds(points);
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [points, map]);
+
+  return null;
+}
+
 export default function MapView({ current, pickup, dropoff, route }: MapViewProps) {
-  const defaultCenter: [number, number] = current || [37.7749, -122.4194]; // fallback: SF
+  const defaultCenter: [number, number] = current || [5.6596423,-0.0096622];
+
+  const allPoints: [number, number][] = [];
+  if (current) allPoints.push(current);
+  if (pickup) allPoints.push(pickup);
+  if (dropoff) allPoints.push(dropoff);
+  if (route && route.length > 0) allPoints.push(...route);
 
   return (
     <div className="w-full h-[500px] rounded-2xl overflow-hidden shadow-md">
@@ -48,7 +57,9 @@ export default function MapView({ current, pickup, dropoff, route }: MapViewProp
           </Marker>
         )}
 
-        {route && <Polyline positions={route} color="blue" />}
+        {route && route.length > 0 && <Polyline positions={route} color="blue" />}
+
+        {allPoints.length > 0 && <FitBounds points={allPoints} />}
       </MapContainer>
     </div>
   );

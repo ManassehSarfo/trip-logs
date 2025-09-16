@@ -1,8 +1,9 @@
 import { useState } from "react";
 import TripForm from "../components/forms/TripForm";
 import MapView from "../components/map/MapView";
-import LogSheet from "../components/log/LogSheet";
 import PageSwitcher from "../components/ui/PageSwitcher";
+import polyline from "@mapbox/polyline";
+import LogSheet from "../components/log/LogSheet";
 
 export default function TripPlanner() {
   const [tripData, setTripData] = useState<{
@@ -10,6 +11,15 @@ export default function TripPlanner() {
     pickup?: [number, number];
     dropoff?: [number, number];
     route?: [number, number][];
+    summary?: { distance: number; duration: number };
+    dailyLogs?: {
+      day: string;
+      entries: {
+        startHour: number;
+        endHour: number;
+        status: "off" | "sleeper" | "driving" | "onduty";
+      }[];
+    }[];
   }>({});
 
   const handleSubmit = async (formData: {
@@ -39,11 +49,15 @@ export default function TripPlanner() {
         body: JSON.stringify(payload),
       });
 
-      if (!res.ok) {
-        throw new Error(`Request failed with status ${res.status}`);
-      }
+      if (!res.ok) throw new Error(`Request failed with status ${res.status}`);
 
       const data = await res.json();
+
+      let decodedRoute: [number, number][] = [];
+      if (data.geometry) {
+        const decoded = polyline.decode(data.geometry);
+        decodedRoute = decoded.map(([lat, lon]) => [lat, lon]);
+      }
 
       setTripData({
         current: payload.current_location
@@ -55,7 +69,9 @@ export default function TripPlanner() {
         dropoff: payload.dropoff_location
           ? [payload.dropoff_location.lat, payload.dropoff_location.lon]
           : undefined,
-        route: data.route || [],
+        route: decodedRoute,
+        summary: data.route.summary,
+        dailyLogs: data.dailyLogs,
       });
     } catch (err) {
       console.error("Trip planning error:", err);
@@ -64,7 +80,7 @@ export default function TripPlanner() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="flex items-center gap-4 mb-6 w-full sm:w-1/3 justify-between">
+      <div className="flex items-center gap-4 mb-6 w-full justify-between">
         <h1 className="text-2xl font-bold text-gray-800">Trip Details</h1>
         <PageSwitcher />
       </div>
@@ -83,17 +99,46 @@ export default function TripPlanner() {
             route={tripData.route}
           />
 
-          <div className="flex gap-4">
-            <LogSheet
-              day={1}
-              entries={[
-                { startHour: 0, endHour: 6, status: "off" },
-                { startHour: 6, endHour: 12, status: "driving" },
-                { startHour: 12, endHour: 14, status: "onduty" },
-                { startHour: 14, endHour: 24, status: "sleeper" },
-              ]}
-            />
+          {tripData.summary && (
+            <div className="p-4 bg-white shadow rounded">
+              <p>
+                Distance: {(tripData.summary.distance / 1000).toFixed(1)} km
+              </p>
+              <p>
+                Duration: {(tripData.summary.duration / 3600).toFixed(1)} hours
+              </p>
+            </div>
+          )}
+
+          <div className="flex flex-col gap-4">
+             <h3 className="text-lg font-semibold mt-4">Daily Logs</h3>
+              <div className="space-y-4">
+                {tripData.dailyLogs?.map((log, idx) => (
+                  <div key={idx} className="border rounded p-3 shadow-sm">
+                    <p className="font-medium">Day {log.day}</p>
+                    <ul className="list-disc ml-5">
+                      {log.entries?.map((seg, i) => (
+                        <li key={i}>
+                          Hours: {seg.startHour} → {seg.endHour} ({seg.status})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                {tripData.dailyLogs?.map((log, idx) => (
+                  <div key={idx} className="border rounded p-3 shadow-sm">
+                    <LogSheet
+                      day={Number(log.day)}
+                      entries={log.entries}
+                      />
+                  </div>
+                ))}
+                {(!tripData.dailyLogs || tripData.dailyLogs.length === 0) ? (
+                  <p className="font-bold text-gray-400">No daily logs available. Kindly input trip details</p>
+                ) : null}
+              </div>
           </div>
+       
         </div>
       </div>
     </div>

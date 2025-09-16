@@ -106,10 +106,16 @@ export default function TripForm({ onSubmit }: TripFormProps) {
   const [pickup, setPickup] = useState<{ name: string; geo: [number, number] | null }>({ name: "", geo: null });
   const [dropoff, setDropoff] = useState<{ name: string; geo: [number, number] | null }>({ name: "", geo: null });
   const [cycleHours, setCycleHours] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit({ current, pickup, dropoff, cycleHours });
+    setLoading(true);
+    try {
+      await onSubmit({ current, pickup, dropoff, cycleHours });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -156,9 +162,10 @@ export default function TripForm({ onSubmit }: TripFormProps) {
 
       <button
         type="submit"
-        className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 rounded-lg shadow text-white"
+        className="w-full px-4 py-2 bg-transparent border-3 border-blue-200 hover:bg-blue-100 text-blue-400 font-bold rounded-lg shadow"
+        disabled={loading}
       >
-        Submit
+        {loading ? "Loading..." : "Get trip info"}
       </button>
     </form>
   );
