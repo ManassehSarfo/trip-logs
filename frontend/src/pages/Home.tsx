@@ -43,12 +43,18 @@ export default function Home() {
     setShowModal(true);
   };
 
+  const handleLogout = () => {
+    localStorage.clear();
+    setDriverName(null);
+    setShowModal(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl p-6 shadow-lg w-full max-w-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 animate-fadeIn">
+          <div className="bg-white rounded-xl p-6 shadow-2xl w-full max-w-md animate-slideUp">
             <h2 className="text-xl font-bold mb-4">Enter Driver Name</h2>
             <input
               type="text"
@@ -60,13 +66,13 @@ export default function Home() {
             <div className="flex justify-end gap-3">
               <button
                 onClick={handleGuest}
-                className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 font-bold"
+                className="px-4 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 font-bold transition"
               >
                 Continue as Guest
               </button>
               <button
                 onClick={handleSaveName}
-                className="px-4 py-2 rounded-lg bg-blue-600  hover:bg-blue-700 font-bold"
+                className="px-4 py-2 border-2 border-blue-200 hover:bg-blue-100 text-blue-500 font-bold rounded-lg shadow transition"
               >
                 Save
               </button>
@@ -76,37 +82,45 @@ export default function Home() {
       )}
 
       {/* Header */}
-      <header className="p-4 flex justify-end gap-2 items-center">
+      <header className="p-4 flex justify-between items-center animate-slideDown">
         <div>
           {driverName && (
             <p className="text-2xl font-bold">Welcome, {driverName} 🚚</p>
           )}
         </div>
         {driverName && (
-          <button
-            onClick={handleSwitchUser}
-            className="px-4 py-2 bg-transparent border-3 border-blue-200 hover:bg-blue-100 text-blue-400 font-bold rounded-lg shadow"
-          >
-            Switch User
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleSwitchUser}
+              className="px-4 py-2 border-2 border-blue-200 hover:bg-blue-100 text-blue-500 font-bold rounded-lg shadow transition"
+            >
+              Switch User
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 border-2 border-red-200 hover:bg-red-100 text-red-500 font-bold rounded-lg shadow transition"
+            >
+              Logout
+            </button>
+          </div>
         )}
       </header>
 
       {/* Content */}
       <main className="flex flex-grow items-center justify-center">
-        <div className="flex flex-col items-center justify-center bg-gray-50 p-20 rounded-lg">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6">
-                Welcome to Trip Planner
-            </h1>
-            <p className="text-gray-600 mb-8">
-                Plan trips, view routes, and generate ELD daily log sheets.
-            </p>
-            <Link
-                to="/trip"
-                className="px-4 py-2 bg-transparent border-3 border-blue-200 hover:bg-blue-100 text-blue-400 font-bold rounded-lg shadow"
-            >
-                Get Started
-            </Link>
+        <div className="flex flex-col items-center justify-center bg-gray-50 p-12 rounded-2xl shadow-lg animate-fadeScale">
+          <h1 className="text-3xl font-bold text-gray-800 mb-6">
+            Welcome to Trip Planner
+          </h1>
+          <p className="text-gray-600 mb-8 text-center">
+            Plan trips, view routes, and generate ELD daily log sheets with ease.
+          </p>
+          <Link
+            to="/trip"
+            className="px-6 py-3 border-2 border-blue-200 hover:bg-blue-100 text-blue-500 font-bold rounded-lg shadow-md transition"
+          >
+            Get Started
+          </Link>
         </div>
       </main>
     </div>
