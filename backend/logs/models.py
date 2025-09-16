@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Driver(models.Model):
     name = models.CharField(max_length=100)
     cycle_hours_used = models.FloatField(default=0)
@@ -14,7 +13,7 @@ class LogSheet(models.Model):
     date = models.DateField(auto_now_add=True)
     start_location = models.CharField(max_length=255)
     end_location = models.CharField(max_length=255, blank=True, null=True)
-    total_hours = models.FloatField(default=0)  # total logged hours
+    total_hours = models.FloatField(default=0)
 
     def __str__(self):
         return f"{self.driver.name} - {self.date}"
