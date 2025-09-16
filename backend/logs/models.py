@@ -29,9 +29,9 @@ class LogEntry(models.Model):
     ]
 
     logsheet = models.ForeignKey(LogSheet, on_delete=models.CASCADE, related_name="entries")
-    day = models.PositiveIntegerField()  # Day index relative to trip
-    start_hour = models.FloatField()     # e.g., 4.77 → 4:46am
-    end_hour = models.FloatField()
+    day = models.PositiveIntegerField(default=1)
+    start_hour = models.FloatField(default=0.0)
+    end_hour = models.FloatField(default=0.0)
     activity_type = models.CharField(max_length=20, choices=ACTIVITY_CHOICES)
     notes = models.TextField(blank=True, null=True)
 
