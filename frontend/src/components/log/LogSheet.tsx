@@ -19,26 +19,24 @@ const statusToRow: Record<DutyStatus, number> = {
 };
 
 export default function LogSheet({ day, entries }: LogSheetProps) {
-  const width = 720; // 30px per hour
-  const height = 200; // 4 rows
+  const width = 720;
+  const height = 200;
   const rowHeight = height / 4;
+  const leftMargin = 60;
 
-  // Build continuous duty path
   let pathD = "";
   entries.forEach((entry, i) => {
     const y = statusToRow[entry.status] * rowHeight + rowHeight / 2;
-    const x1 = (entry.startHour / 24) * width;
-    const x2 = (entry.endHour / 24) * width;
+    const x1 = leftMargin + (entry.startHour / 24) * width;
+    const x2 = leftMargin + (entry.endHour / 24) * width;
 
     if (i === 0) {
       pathD += `M ${x1},${y} L ${x2},${y}`;
     } else {
       const prevEntry = entries[i - 1];
       const prevY =
-        statusToRow[prevEntry.status] * rowHeight + rowHeight / 2;
-      const prevX = (entry.startHour / 24) * width;
+      statusToRow[prevEntry.status] * rowHeight + rowHeight / 2;
 
-      // Draw vertical line if status changed
       if (prevEntry.status !== entry.status) {
         pathD += ` L ${x1},${prevY} L ${x1},${y} L ${x2},${y}`;
       } else {
@@ -48,41 +46,56 @@ export default function LogSheet({ day, entries }: LogSheetProps) {
   });
 
   return (
-    <div className="bg-white p-4 rounded-2xl shadow-md">
+    <div className="bg-white p-4 rounded-2xl shadow-md overflow-x-auto">
       <h3 className="text-lg font-semibold text-gray-800 mb-4">
         Driver’s Daily Log – Day {day}
       </h3>
 
-      <svg width={width} height={height + 20} className="border border-gray-400">
-        {/* Horizontal grid lines */}
-        {["Off Duty", "Sleeper Berth", "Driving", "On Duty"].map((label, i) => (
-          <g key={i}>
-            <line
-              x1={0}
-              y1={i * rowHeight + rowHeight / 2}
-              x2={width}
-              y2={i * rowHeight + rowHeight / 2}
-              stroke="#ccc"
-              strokeWidth={1}
-            />
-            <text
-              x={-5}
-              y={i * rowHeight + rowHeight / 2 + 4}
-              fontSize="10"
-              textAnchor="end"
-              fill="#333"
-            >
-              {label}
-            </text>
-          </g>
-        ))}
+      <svg
+        width={width + leftMargin}
+        height={height + 20}
+        className="border border-gray-400"
+      >
+        {/* Horizontal grid lines and labels */}
+        {["Off Duty", "Slp Berth", "Driving", "On Duty"].map((label, i) => {
+          const y = i * rowHeight + rowHeight / 2;
+          return (
+            <g key={i}>
+              <line
+                x1={leftMargin}
+                y1={y}
+                x2={leftMargin + width}
+                y2={y}
+                stroke="#ccc"
+                strokeWidth={1}
+              />
+              <text
+                x={leftMargin - 10}
+                y={y + 4}
+                fontSize="12"
+                textAnchor="end"
+                fill="#333"
+                fontWeight="500"
+              >
+                {label}
+              </text>
+            </g>
+          );
+        })}
 
         {/* Vertical hour marks */}
         {Array.from({ length: 25 }).map((_, i) => {
-          const x = (i / 24) * width;
+          const x = leftMargin + (i / 24) * width;
           return (
             <g key={i}>
-              <line x1={x} y1={0} x2={x} y2={height} stroke="#ddd" strokeWidth={1} />
+              <line
+                x1={x}
+                y1={0}
+                x2={x}
+                y2={height}
+                stroke="#ddd"
+                strokeWidth={1}
+              />
               {i % 2 === 0 && i < 24 && (
                 <text
                   x={x}
