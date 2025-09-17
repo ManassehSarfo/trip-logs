@@ -34,5 +34,5 @@ if settings.DEBUG:
 
 # Catch-all React route, but exclude static and media URLs
 urlpatterns += [
-    re_path(r"^(?!static/|assets/).*", index, name="index"),
+    re_path(r"^(?!static/|assets/|api/|admin/).*", index, name="index"),
 ]
