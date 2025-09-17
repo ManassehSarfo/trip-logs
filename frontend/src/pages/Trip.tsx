@@ -5,6 +5,8 @@ import PageSwitcher from "../components/ui/PageSwitcher";
 import polyline from "@mapbox/polyline";
 import LogSheet from "../components/log/LogSheet";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
 export default function TripPlanner() {
   const [tripData, setTripData] = useState<{
     current?: [number, number];
@@ -43,7 +45,7 @@ export default function TripPlanner() {
     };
 
     try {
-      const res = await fetch("http://localhost:8000/api/trip/logs/", {
+      const res = await fetch(`${API_BASE_URL}/api/trip/logs/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

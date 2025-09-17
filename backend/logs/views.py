@@ -5,6 +5,8 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
+import os
+from django.conf import settings
 
 from .models import Driver, LogSheet, LogEntry, Stop
 from .serializers import (
@@ -12,6 +14,10 @@ from .serializers import (
     TripLogsRequestSerializer
 )
 from .services import plan_and_persist_trip
+
+def index(request):
+    print("Template DIRS:", settings.TEMPLATES[0]['DIRS'])
+    return render(request, "index.html")
 
 class DriverViewSet(viewsets.ModelViewSet):
     queryset = Driver.objects.all()

@@ -34,6 +34,8 @@ interface LogSheetModel {
   stops: Stop[];
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+
 export default function Logs() {
   const [logsheets, setLogsheets] = useState<LogSheetModel[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,7 +52,7 @@ export default function Logs() {
 
       try {
         const res = await fetch(
-          `http://localhost:8000/api/logsheets/by-driver/?name=${encodeURIComponent(
+          `${API_BASE_URL}/api/logsheets/by-driver/?name=${encodeURIComponent(
             driverName
           )}`
         );
