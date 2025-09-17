@@ -42,6 +42,13 @@ Built with **Django (backend)** and **React + TypeScript (frontend)**.
 - Docker (optional, for containerized setup)
 - Git
 
-### Diagrams & Architechure
+### Diagrams & Architechure Tools
 - Draw IO
----
+
+### Diagrams
+
+- Sequence Diagram
+
+<img src="diagrams/sequence-diagram.png"  width="auto" height="200em">
+
+- [C4 model](https://drive.google.com/file/d/1Gx2yQOs2p38K3KiSkKqVjWQYcE-b-Jcf/view)
